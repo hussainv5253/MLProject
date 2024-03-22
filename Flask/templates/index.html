@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wind Power Forecasting</title>
+</head>
+<body>
+    <h1>Forecasting Power Production of Windfarms</h1>
+    <form action="/forecast" method="post">
+        <label for="farm_id">Wind Farm ID:</label>
+        <select id="farm_id" name="farm_id">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+        </select><br><br>
+        <label for="horizon">Forecasting Horizon:</label>
+        <select id="horizon" name="horizon">
+            <option value="6">6 hours</option>
+            <option value="12">12 hours</option>
+            <option value="24">24 hours</option>
+        </select><br><br>
+        <input type="submit" value="Forecast">
+    </form>
+</body>
+</html>
