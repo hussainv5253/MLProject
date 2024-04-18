@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wind Power Forecasting</title>
+</head>
+<body>
+    <h1>Wind Power Forecasting Results</h1>
+    
+    <h2>Predicted Power Production:</h2>
+    <p>{{ y_pred }}</p>
+
+    <h2>Mean Absolute Error:</h2>
+    <p>{{ mae }}</p>
+
+    <h2>Predictions Plot:</h2>
+    <img src="{{ url_for('static', filename=plot_filename) }}" alt="Predictions Plot">
+
+</body>
+</html>
