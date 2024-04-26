@@ -14,8 +14,12 @@ def forecast():
         horizon = int(request.form['horizon'])
         y_pred = wind_farm_prediction(farm_id, horizon)
 
-        # Pass the list of tuples (timestamp, power_value) to the HTML template
-        predictions = [(str(timestamp), power_value) for timestamp, power_value in y_pred.items()]
+        # Extract timestamps and power values from the predictions
+        timestamps = [timestamp for timestamp, _ in y_pred]
+        power_values = [power_value for _, power_value in y_pred]
+
+        # Combine timestamps and power values into a list of tuples
+        predictions = list(zip(timestamps, power_values))
 
         return render_template('index.html', predictions=predictions)
     else:

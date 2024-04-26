@@ -1,11 +1,8 @@
-import os
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.metrics import mean_absolute_error
-from sktime.forecasting.arima import ARIMA
+import xgboost as xgb
 
 def wind_farm_prediction(wind_farm_ID, horizon):
+    # Load the data based on the wind farm ID
     if wind_farm_ID == 1:
         DATA_PATH = 'https://github.com/Bob05757/Renewable-energy-generation-input-feature-variables-analysis/raw/main/data_processed/wind_farms/Wind%20farm%20site%201%20(Nominal%20capacity-99MW).xlsx'
         df_wf = pd.read_excel(DATA_PATH)
@@ -23,32 +20,50 @@ def wind_farm_prediction(wind_farm_ID, horizon):
 
     df_wf.columns = [col.strip() for col in df_wf.columns]
     df_wf.set_index('time', inplace=True)
-    df_wf = df_wf.asfreq('15min')
 
-    one_month_range = df_wf.index.max() - pd.DateOffset(months=1)
-    df_demo = df_wf[df_wf.index >= one_month_range]
+    # Calculate the number of data points for one month
+    num_data_points_in_one_month = 15 * 4 * 24 * 30
 
-    y_train = df_wf['Power(MW)']
+    # Split the DataFrame into two parts: last one month and the rest
+    df_demo = df_wf.iloc[-num_data_points_in_one_month:]
+    df_train = df_wf.iloc[10000:-num_data_points_in_one_month]
+
+    y_train = df_train['Power(MW)']
+    X_train = df_train[['WS_cen', 'WD_cen', 'Air_T']]
+    
     y_test = df_demo[['Power(MW)']]
+    X_test = df_demo[['WS_cen', 'WD_cen', 'Air_T']]
 
-    forecast = []
-    pred_range = horizon * 60 // 15 
+    # Initialize the XGBoost model
+    xgboost_model = xgb.XGBRegressor(max_depth=10, learning_rate=0.11, n_estimators=62)
 
-    history = np.array(y_train)
+    # Initialize an empty list to store predictions and timestamps
+    predictions = []
+    timestamps = []
 
-    for t in range(pred_range):
-        model = ARIMA(order=(1, 0, 1))
-        model.fit(history)
-        output = model.predict(fh=1)
+    # Iterate over each time step in the horizon
+    for t in range(horizon*4):
+        # Fit the initial model
+        xgboost_model.fit(X_train, y_train)
+        
+        # Predict using the model
+        prediction = xgboost_model.predict(X_test.iloc[[t]])
 
-        if isinstance(output, pd.DataFrame):
-            forecast_value = output.iloc[0, 0]
-        else:
-            forecast_value = output[0, 0] if len(output.shape) == 2 else output[0]
+        # Append the prediction to the list of predictions
+        predictions.append(prediction[0])
 
-        forecast.append(forecast_value)
-        history = np.append(history, forecast_value)
+        # Store the corresponding timestamp
+        timestamps.append(df_demo.index[t])
 
-    y_pred = pd.Series(forecast, index=y_test.index[:pred_range])
+        # Remove the oldest row from X_train and y_train
+        X_train = X_train.iloc[1:]
+        y_train = y_train.iloc[1:]
 
-    return y_pred
+        # Append the corresponding row from X_test to X_train and the prediction to y_train
+        X_train = pd.concat([X_train, X_test.iloc[[t]]])
+        y_train = pd.concat([y_train, pd.Series(prediction, index=[y_test.index[t]])])
+
+    # Combine timestamps and predictions into a list of tuples
+    result = list(zip(timestamps, predictions))
+
+    return result
