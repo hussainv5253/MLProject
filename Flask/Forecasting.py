@@ -28,7 +28,7 @@ def wind_farm_prediction(wind_farm_ID, horizon, last_forecast_end_time=None):
     df_wf.index = pd.to_datetime(df_wf.index)
 
     # Define the fixed length for df_train in number of months
-    fixed_train_length_months = 6
+    fixed_train_length_months = 13
 
     # Calculate the fixed window size in terms of days
     fixed_window_size_days = fixed_train_length_months * 30
