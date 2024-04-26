@@ -21,17 +21,36 @@ def wind_farm_prediction(wind_farm_ID, horizon, last_forecast_end_time=None):
     df_wf.columns = [col.strip() for col in df_wf.columns]
     df_wf.set_index('time', inplace=True)
 
-    # Calculate the number of data points for one month
-    num_data_points_in_one_month = 15 * 4 * 24 * 30
+    # Convert the index of df_wf to datetime objects
+    df_wf.index = pd.to_datetime(df_wf.index)
+
+    # Define the fixed length for df_train in number of months
+    fixed_train_length_months = 6
+
+    # Calculate the fixed window size in terms of days
+    fixed_window_size_days = fixed_train_length_months * 30
+
+    # Convert the fixed window size to a timedelta object
+    fixed_window_size_timedelta = pd.Timedelta(days=fixed_window_size_days)
 
     # Use last_forecast_end_time if available
     if last_forecast_end_time is not None:
-        # Update df_demo and df_train based on last_forecast_end_time
+        # Update df_demo based on last_forecast_end_time
         df_demo = df_wf.loc[last_forecast_end_time:]
-        df_train = df_wf.loc[:last_forecast_end_time]
+
+        # Update df_train based on fixed_train_length_months
+        df_train_end = last_forecast_end_time
+        df_train_start = df_train_end - fixed_window_size_timedelta
+        df_train = df_wf.loc[df_train_start:last_forecast_end_time]
     else:
-        df_demo = df_wf.iloc[-num_data_points_in_one_month:]
-        df_train = df_wf.iloc[15000:-num_data_points_in_one_month]
+        # Calculate the end time for df_train (starting point for df_demo)
+        df_train_end = df_wf.index[0] + fixed_window_size_timedelta
+
+        # Define df_train using fixed_train_length_months
+        df_train = df_wf.loc[:df_train_end]
+
+        # Define df_demo using the remainder of df_wf
+        df_demo = df_wf.loc[df_train_end:]
 
     y_train = df_train['Power(MW)']
     X_train = df_train[['WS_cen', 'WD_cen', 'Air_T']]
@@ -39,6 +58,8 @@ def wind_farm_prediction(wind_farm_ID, horizon, last_forecast_end_time=None):
     y_test = df_demo[['Power(MW)']]
     X_test = df_demo[['WS_cen', 'WD_cen', 'Air_T']]
 
+    print(len(df_wf))
+    print(len(y_train))
     # Initialize the XGBoost model
     xgboost_model = xgb.XGBRegressor(max_depth=10, learning_rate=0.11, n_estimators=62)
 
