@@ -1,7 +1,7 @@
 import pandas as pd
 import xgboost as xgb
 
-def wind_farm_prediction(wind_farm_ID, horizon):
+def wind_farm_prediction(wind_farm_ID, horizon, last_forecast_end_time=None):
     # Load the data based on the wind farm ID
     if wind_farm_ID == 1:
         DATA_PATH = 'https://github.com/Bob05757/Renewable-energy-generation-input-feature-variables-analysis/raw/main/data_processed/wind_farms/Wind%20farm%20site%201%20(Nominal%20capacity-99MW).xlsx'
@@ -17,16 +17,21 @@ def wind_farm_prediction(wind_farm_ID, horizon):
         df_wf.columns =  ['time', 'WS_10', 'WD_10', 'WS_30', 'WD_30', 'WS_50', 'WD_50', 'WS_cen', 'WD_cen', 'Air_T', 'Air_P', 'Air_H', 'Power(MW)']
     else:
         raise ValueError("Invalid wind_farm_ID. Please choose 1, 2, or 3.")
-
+    
     df_wf.columns = [col.strip() for col in df_wf.columns]
     df_wf.set_index('time', inplace=True)
 
     # Calculate the number of data points for one month
     num_data_points_in_one_month = 15 * 4 * 24 * 30
 
-    # Split the DataFrame into two parts: last one month and the rest
-    df_demo = df_wf.iloc[-num_data_points_in_one_month:]
-    df_train = df_wf.iloc[10000:-num_data_points_in_one_month]
+    # Use last_forecast_end_time if available
+    if last_forecast_end_time is not None:
+        # Update df_demo and df_train based on last_forecast_end_time
+        df_demo = df_wf.loc[last_forecast_end_time:]
+        df_train = df_wf.loc[:last_forecast_end_time]
+    else:
+        df_demo = df_wf.iloc[-num_data_points_in_one_month:]
+        df_train = df_wf.iloc[10000:-num_data_points_in_one_month]
 
     y_train = df_train['Power(MW)']
     X_train = df_train[['WS_cen', 'WD_cen', 'Air_T']]
@@ -66,4 +71,7 @@ def wind_farm_prediction(wind_farm_ID, horizon):
     # Combine timestamps and predictions into a list of tuples
     result = list(zip(timestamps, predictions))
 
-    return result
+    # Return the end time of the forecast (last timestamp)
+    end_time = timestamps[-1]
+
+    return result, end_time

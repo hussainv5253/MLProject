@@ -99,6 +99,12 @@
             font-size: 12px; /* Adjust the font size of the prediction values */
         }
 
+        /* Style for the additional info */
+        #additional-info {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
     </style>
 </head>
 
@@ -128,6 +134,11 @@
         <!-- Section to display the predictions -->
         <div id="predictions">
             <h2>Predictions</h2>
+            {% if farm_id and horizon %}
+            <div id="additional-info">
+                <p>Wind Farm ID: {{ farm_id }}, Horizon: {{ horizon }} hours</p>
+            </div>
+            {% endif %}
             <ul>
                 {% if predictions %}
                     {% for timestamp, power_value in predictions %}
