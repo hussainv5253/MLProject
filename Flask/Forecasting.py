@@ -1,5 +1,8 @@
 import pandas as pd
 import xgboost as xgb
+import matplotlib.pyplot as plt
+import io
+import base64
 
 def wind_farm_prediction(wind_farm_ID, horizon, last_forecast_end_time=None):
     # Load the data based on the wind farm ID
@@ -58,8 +61,6 @@ def wind_farm_prediction(wind_farm_ID, horizon, last_forecast_end_time=None):
     y_test = df_demo[['Power(MW)']]
     X_test = df_demo[['WS_cen', 'WD_cen', 'Air_T']]
 
-    print(len(df_wf))
-    print(len(y_train))
     # Initialize the XGBoost model
     xgboost_model = xgb.XGBRegressor(max_depth=10, learning_rate=0.11, n_estimators=62)
 
@@ -95,4 +96,20 @@ def wind_farm_prediction(wind_farm_ID, horizon, last_forecast_end_time=None):
     # Return the end time of the forecast (last timestamp)
     end_time = timestamps[-1]
 
-    return result, end_time
+    # Plot the predictions
+    plt.figure(figsize=(6, 5))
+    plt.plot(df_demo.index.intersection(pd.to_datetime(timestamps)), df_demo.loc[df_demo.index.intersection(pd.to_datetime(timestamps)), 'Power(MW)'], marker='', linestyle='-', color='blue', label='Real')
+    plt.plot(pd.to_datetime(timestamps), predictions, marker='o', linestyle='-', color='orange', label='Predicted')
+    plt.xlabel('Time')
+    plt.ylabel('Power (MW)')
+    plt.xticks(rotation=45)
+    plt.legend()
+    plt.tight_layout()
+
+    # Convert plot to bytes
+    plot_bytes = io.BytesIO()
+    plt.savefig(plot_bytes, format='png')
+    plot_bytes.seek(0)
+    plot_base64 = base64.b64encode(plot_bytes.read()).decode('utf-8')
+
+    return result, end_time, plot_base64
