@@ -1,6 +1,13 @@
 # Wind Farm Power Forecasting
 
-Welcome to the Wind Farm Power Forecasting project repository! This project aims to forecast the power generation of three different wind farms for user-defined horizons using a multi-step recursive forecasting approach with XGBoost.
+Welcome to the Wind Farm Power Forecasting project repository! Our project is centered around the development of a web API tailored for predicting the power production of windmill farms. Accurate forecasting of renewable energy generation is vital for optimizing power systems and facilitating the integration of more renewable energy sources into the grid. Without precise forecasts, we cannot fully harness the benefits of an efficient energy management system.
+
+Forecasting renewable energy generation is a complex task due to its inherent variability, which is heavily influenced by meteorological conditions such as wind speed, temperature, and air pressure. To tackle this challenge, our project utilizes a multi-step recursive forecasting approach with XGBoost, a powerful machine learning algorithm.
+
+
+For our project, we leverage the dataset sourced from the "Solar and Wind Power Data from the Chinese State Grid Renewable Energy Generation Forecasting Competition". This dataset contains comprehensive information on power generation from six windmill farms, each equipped with various turbine types. Our focus lies on farms 1, 2, and 3. The dataset provides power generation data at a 15-minute granularity, alongside weather-related variables. 
+
+We have included a breakdown of the wind power data across the six sites, showcasing the diversity in rotor diameters and hub heights of the windmills. Additionally, we have provided a description of the dataset columns for better understanding.
 
 ## Project Components
 
