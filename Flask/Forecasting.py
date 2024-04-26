@@ -31,7 +31,7 @@ def wind_farm_prediction(wind_farm_ID, horizon, last_forecast_end_time=None):
         df_train = df_wf.loc[:last_forecast_end_time]
     else:
         df_demo = df_wf.iloc[-num_data_points_in_one_month:]
-        df_train = df_wf.iloc[10000:-num_data_points_in_one_month]
+        df_train = df_wf.iloc[15000:-num_data_points_in_one_month]
 
     y_train = df_train['Power(MW)']
     X_train = df_train[['WS_cen', 'WD_cen', 'Air_T']]
