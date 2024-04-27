@@ -39,8 +39,35 @@ We have included a breakdown of the wind power data across the three sites, show
 To use the Wind Farm Power Forecasting application:
 1. Clone this repository to your local machine.
 2. Install the necessary dependencies as mentioned in the requirements file.
-3. Run the Flask application to start the server.
-4. Access the web interface through your browser and input wind farm IDs and forecasting horizons to get power generation predictions.
+
+#!/bin/bash
+ 
+#### Update the package index
+sudo apt update
+ 
+#### Install necessary packages
+sudo apt install python3-pip python3-dev nginx -y
+ 
+#### Install virtualenv
+sudo pip3 install virtualenv
+ 
+#### Create a virtual environment
+virtualenv env
+ 
+#### Activate the virtual environment
+source env/bin/activate
+ 
+#### Install required Python packages
+pip install uwsgi pandas xgboost Flask openpyxl scikit-learn
+ 
+#### Deactivate the virtual environment
+deactivate
+ 
+#### Run uwsgi
+uwsgi --socket 0.0.0.0:5000 --protocol=http -w wsgi:application
+
+4. Run the Flask application to start the server.
+5. Access the web interface through your browser and input wind farm IDs and forecasting horizons to get power generation predictions.
 
 ## Contributors
 - mattdltvt5 | hussainv5253 | Ganta-Karthik1999
