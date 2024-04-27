@@ -58,6 +58,7 @@ deactivate
  
 #### Run uwsgi
 uwsgi --socket 0.0.0.0:5000 --protocol=http -w wsgi:application
+
 3. Access the web interface through your browser and input wind farm IDs and forecasting horizons to get power generation predictions.
 
 ## Contributors
