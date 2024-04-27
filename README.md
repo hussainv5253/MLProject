@@ -38,7 +38,7 @@ We have included a breakdown of the wind power data across the three sites, show
 ## Usage
 To use the Wind Farm Power Forecasting application:
 1. Clone this repository to your local machine.
-2. Install the necessary dependencies as mentioned in the requirements file.
+2. Install the necessary dependencies as mentioned below:
 
 #!/bin/bash
  
