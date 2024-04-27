@@ -12,14 +12,14 @@ We have included a breakdown of the wind power data across the three sites, show
 ## Project Components
 
 ### Datasets
-- We have included datasets for the three studied wind farms. These datasets are used for training and evaluating the forecasting model. they can be found under the ./Datasets folder
+- We have included datasets for the three studied wind farms. These datasets are used for training and evaluating the forecasting model. They can be found under the ./Datasets folder
 
 - EDA was performed on the data from the three wind farms to determine the best features to use for forecasting the power. This EDA for each can be found in the corresponding TEST1_models, TEST2_models and TEST3_models respectively. 
 
 ### Model
 - The project includes the trained XGBoost model used for power forecasting. The model has been trained on historical data from the wind farms. 
 
-- The decision to use XGBoost was made after performing EDA and metric comparison between different models, including a linear regressor, Random Forest, ARIMA, SARIMA, AR and MA. We also tested some models with reduction. The goal was to compare the results we got from the different models and determine the best model, which was XGBoost for our final webapp. We run the XGBoost seperately in XGBoost_final.ipynb for good measure
+- The decision to use XGBoost was made after performing EDA and metric comparison between different models, including a linear regressor, Random Forest, ARIMA, SARIMA, AR and MA. We also tested some models with dimensionality reduction. The goal was to compare the results we got from the different models and determine the best model, which was XGBoost for our final webapp. We run the XGBoost seperately in XGBoost_final.ipynb for good measure
 
 ### Notebook
 - The Jupyter notebook used to train the XGBoost model is provided in the repository. You can explore the data preprocessing, model training, and evaluation steps in this notebook.
