@@ -33,7 +33,7 @@ We have included a breakdown of the wind power data across the three sites, show
 - The Flask code and HTML files constitute the web application interface for accessing the power forecasting functionality. Users can input wind farm IDs and forecasting horizons to receive power generation predictions.
 
 ### Postman Environment and Documentation
-- We have created a Postman environment and documented the API endpoints for easy integration and testing. The documentation provides details on how to interact with the forecasting API.
+- We have created a Postman environment and documented the API endpoints for easy integration and testing. The documentation provides details on how to interact with the forecasting API. [Postman Environment and Documentation](https://documenter.getpostman.com/view/31038181/2sA3Bt3puG)
 
 ## Usage
 To use the Wind Farm Power Forecasting application:
@@ -66,8 +66,8 @@ deactivate
 #### Run uwsgi
 uwsgi --socket 0.0.0.0:5000 --protocol=http -w wsgi:application
 
-4. Run the Flask application to start the server.
-5. Access the web interface through your browser and input wind farm IDs and forecasting horizons to get power generation predictions.
+3. Run the Flask application to start the server.
+4. Access the web interface through your browser and input wind farm IDs and forecasting horizons to get power generation predictions.
 
 ## Contributors
 - mattdltvt5 | hussainv5253 | Ganta-Karthik1999
