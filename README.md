@@ -35,28 +35,28 @@ To use the Wind Farm Power Forecasting application:
 2. Install the necessary dependencies as mentioned in the requirements file.
 #!/bin/bash
  
-# Update the package index
+#### Update the package index
 sudo apt update
  
-# Install necessary packages
+#### Install necessary packages
 sudo apt install python3-pip python3-dev nginx -y
  
-# Install virtualenv
+#### Install virtualenv
 sudo pip3 install virtualenv
  
-# Create a virtual environment
+#### Create a virtual environment
 virtualenv env
  
-# Activate the virtual environment
+#### Activate the virtual environment
 source env/bin/activate
  
-# Install required Python packages
+#### Install required Python packages
 pip install uwsgi pandas xgboost Flask openpyxl scikit-learn
  
-# Deactivate the virtual environment
+#### Deactivate the virtual environment
 deactivate
  
-# Run uwsgi
+#### Run uwsgi
 uwsgi --socket 0.0.0.0:5000 --protocol=http -w wsgi:application
 3. Access the web interface through your browser and input wind farm IDs and forecasting horizons to get power generation predictions.
 
